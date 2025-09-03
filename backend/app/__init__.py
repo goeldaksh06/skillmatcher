@@ -23,6 +23,9 @@ def create_app(config_name='default'):
     # Ensure upload directory exists
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
+    # Import models to ensure they are registered
+    from app.models import User, Assessment, Question, Answer, AssessmentResult
+    
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.assessment import assessment_bp
@@ -31,5 +34,10 @@ def create_app(config_name='default'):
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(assessment_bp, url_prefix='/api/assessment')
     app.register_blueprint(recruiter_bp, url_prefix='/api/recruiter')
+    
+    # Add a simple health check route
+    @app.route('/health')
+    def health_check():
+        return {'status': 'healthy', 'message': 'Skill Matcher API is running'}
     
     return app
