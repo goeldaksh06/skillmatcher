@@ -1,4 +1,5 @@
 import os
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -24,10 +25,12 @@ def create_app(config_name='default'):
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
     # Register blueprints
+    from app.routes.main import main_bp
     from app.routes.auth import auth_bp
     from app.routes.assessment import assessment_bp
     from app.routes.recruiter import recruiter_bp
     
+    app.register_blueprint(main_bp, url_prefix='/')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(assessment_bp, url_prefix='/api/assessment')
     app.register_blueprint(recruiter_bp, url_prefix='/api/recruiter')
